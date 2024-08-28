@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+package grpcbin;
+option go_package = "github.com/tiagomelo/go-grpc-bin/api/proto/gen/grpcbin";
+
+service GRPCBin {
+    // Echo returns the received message back to the client.
+    rpc Echo(EchoRequest) returns (EchoResponse);
+    
+    // GetMetadata retrieves the metadata (headers) from 
+    // the incoming context and returns it.
+    rpc GetMetadata(MetadataRequest) returns (MetadataResponse);
+    
+    // StatusCode simulates returning a specific status code. 
+    // If the status code is an error, it returns an error with that code.
+    rpc StatusCode(StatusCodeRequest) returns (StatusCodeResponse);
+    
+    // StreamingEcho sends multiple responses back to the client, 
+    // simulating a server-side streaming RPC.
+    rpc StreamingEcho(StreamingEchoRequest) returns (stream StreamingEchoResponse);
+    
+    // BidirectionalEcho allows both the client and server to 
+    // send messages in a bidirectional streaming RPC.
+    rpc BidirectionalEcho(stream EchoRequest) returns (stream EchoResponse);
+    
+    // DelayedResponse simulates a delay before returning the response.
+    rpc DelayedResponse(DelayRequest) returns (EchoResponse);
+
+    // Upload receives a stream of binary data and 
+    // simulates an upload operation.
+    rpc Upload(stream UploadRequest) returns (UploadResponse);
+
+    // Download sends a stream of binary data back to 
+    // the client, simulating a file download.
+    rpc Download(DownloadRequest) returns (stream DownloadResponse);
+    
+    // SimulateError simulates an error based on the request.
+    rpc SimulateError(ErrorRequest) returns (ErrorResponse);
+
+    // Mirror echoes back the received message and metadata.
+    rpc Mirror(MirrorRequest) returns (MirrorResponse);
+
+    // Transform  processes the input string according to
+    // a specified transformation type (e.g., reversing the string).
+    rpc Transform(TransformRequest) returns (TransformResponse);
+
+    // CompressionTest simulates compression by compressing 
+    // the data using gzip before returning it.
+    rpc CompressionTest(CompressionRequest) returns (CompressionResponse);
+}
+
+message EchoRequest {
+    string message = 1;
+}
+
+message EchoResponse {
+    string message = 1;
+}
+
+message MetadataRequest {}
+
+message MetadataResponse {
+    map<string, string> metadata = 1;
+}
+
+message StatusCodeRequest {
+    int32 code = 1;
+}
+
+message StatusCodeResponse {
+    string message = 1;
+}
+
+message StreamingEchoRequest {
+    string message = 1;
+}
+
+message StreamingEchoResponse {
+    string message = 1;
+}
+
+message DelayRequest {
+    int32 delay_seconds = 1;
+    string message = 2;
+}
+
+message UploadRequest {
+    bytes data = 1;
+}
+
+message UploadResponse {
+    string message = 1;
+}
+
+message DownloadRequest {
+    string filename = 1;
+}
+
+message DownloadResponse {
+    bytes data = 1;
+}
+
+message ErrorRequest {
+    int32 code = 1;
+    string message = 2;
+}
+
+message ErrorResponse {
+    string message = 1;
+}
+
+message MirrorRequest {
+    string message = 1;
+}
+
+message MirrorResponse {
+    string message = 1;
+    map<string, string> metadata = 2;
+}
+
+message TransformRequest {
+    string input = 1;
+    string transformation_type = 2; // e.g., "reverse", "uppercase"
+}
+
+message TransformResponse {
+    string output = 1;
+}
+
+message CompressionRequest {
+    string data = 1;
+}
+
+message CompressionResponse {
+    bytes compressed_data = 1;
+}
