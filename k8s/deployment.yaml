@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-grpc-bin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-grpc-bin
+  template:
+    metadata:
+      labels:
+        app: go-grpc-bin
+    spec:
+      containers:
+      - name: go-grpc-bin
+        image: tiagoharris/go-grpc-bin:latest
+        args: ["-p", "50051"]
+        ports:
+        - containerPort: 50051
